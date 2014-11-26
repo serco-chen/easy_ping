@@ -20,7 +20,7 @@ Or install it yourself as:
 
     $ gem install easy_ping
 
-If you perfer using the latest code, you can build from source:
+If you prefer to use the latest code, you can build from source:
 
 ```
 gem build easy_ping.gemspec
@@ -29,7 +29,7 @@ gem install easy_ping-<VERSION>.gem
 
 ## Configuration
 
-Write these code to your configuration file, for example, `easy_ping.rb`.
+Write these lines of code to your configuration file, for example, `easy_ping.rb`.
 
 ```ruby
 EasyPing.configure do |config|
