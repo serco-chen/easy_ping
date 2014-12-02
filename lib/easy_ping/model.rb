@@ -106,10 +106,19 @@ module EasyPing
       end
 
       def refund(*args)
-        if list? || type == 'refund'
-          raise NoMethodError, "undefined method `refund' for list or EasyPing::Refund"
+        if models.respond_to?(:refund)
+          models.refund(config, *args)
+        else
+          raise NoMethodError, "undefined method `refund' for instance of EasyPing::Model"
         end
-        EasyPing::Refund.new(config).refund(*args, charge_id: id)
+      end
+
+      def all_refund(*args)
+        if models.respond_to?(:all_refund)
+          models.all_refund(config, *args)
+        else
+          raise NoMethodError, "undefined method `all_refund' for instance of EasyPing::Model"
+        end
       end
 
       extend Forwardable
@@ -161,6 +170,17 @@ module EasyPing
       def live?
         live ? true : false
       end
+
+      def refund(config, *args)
+        EasyPing::Refund.new(config).refund(*args, charge_id: id)
+      end
+
+      def all_refund(config, *args)
+        EasyPing::Refund.new(config).all(id, *args)
+      end
+
+      alias_method :all_refunds, :all_refund
+      alias_method :get_refund_list, :all_refund
     end
 
     class Refund < Abstract

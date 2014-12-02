@@ -1,6 +1,4 @@
 module EasyPing
-  CHANNELS = ["alipay", "wx", "upmp", "alipay_wap", "upmp_wap"]
-
   class Base
     include EasyPing::Utils
     attr_reader :config

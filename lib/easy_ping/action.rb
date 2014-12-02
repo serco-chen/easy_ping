@@ -20,6 +20,8 @@ module EasyPing
 
   class Action
     include EasyPing::Utils
+    CHANNELS = ["alipay", "wx", "upmp", "alipay_wap", "upmp_wap"]
+
     attr_reader :client, :config
 
     def initialize(config)
@@ -47,6 +49,10 @@ module EasyPing
       missing_parameters = requires - options.keys.map(&:to_s)
       if missing_parameters.length > 0
         raise MissingRequiredParameters, %Q{#{missing_parameters} is required
+        for this action.}
+      end
+      if options['channel'] && !CHANNELS.include?(options['channel'].to_s)
+        raise ParametersInvalid, %Q{#{options['channel']} is not valid channel
         for this action.}
       end
     end
@@ -91,8 +97,8 @@ module EasyPing
       EasyPing::Model::Wrapper.parse! raw_response, config
     end
 
-    def all(params={})
-      params = indifferent_hash params
+    def all(*args)
+      params = indifferent_params(args, 'charge_id')
 
       # map keys to API request format
       params = compile params
