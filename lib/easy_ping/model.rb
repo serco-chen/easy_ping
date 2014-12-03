@@ -34,6 +34,8 @@ module EasyPing
         setup(get_prev_page.response)
       end
 
+      alias_method :has_more?, :has_more
+
     private
       def extract_params
         if params = url.match(/(?:\?).+$/)

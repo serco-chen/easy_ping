@@ -2,7 +2,9 @@
 
 EasyPing is an out of the box Ping++ Ruby SDK. Once installed, you're ready to set up a minimal configuration and get started using EasyPing.
 
-**Warn UNDER DEVELOPMENT** Not ready for production purpose yet.
+**Note**
+It's released on [RubyGems](https://rubygems.org/gems/easy_ping).
+If something doesn't work, feel free to report a bug or start an issue.
 
 ## Installation
 
@@ -67,6 +69,16 @@ charge = EasyPing.charge({
   metadata:     { color: 'red'},
 })
 
+# Returned Charge Object
+charge.raw # raw response body, typically json string
+charge.values # parsed response body, hash
+charge.heasers # response headers
+charge.status # response status, http code
+charge.live? # livemode or not
+
+charge.amount # attributes defined on Ping++ API
+charge.livemode
+charge.refunded
 
 ## Retrieve Single Charge ##
 
@@ -117,6 +129,11 @@ charges.get_prev_page! # same above
 new_charges = charges.get_next_page # note: ending_before option will be omitted
 charges.get_prev_page!(limit: 5) # note: starting_after option will be omitted
 
+# Returned Charge List Object
+charges.has_more?
+charges.url
+charges.each {|ch| puts ch.id }
+
 
 ## Create Refund ##
 
@@ -145,6 +162,16 @@ charge.refund(options) -> refund object
 # Examples
 charge = EasyPing::Charge.find 'ch_0ijQi5LKqT5sEiOePOKWb1mF'
 refund = charge.refund 10, 'refund description'
+
+# Returned Refund Object
+refund.raw # raw response body, typically json string
+refund.values # parsed response body, hash
+refund.heasers # response headers
+refund.status # response status, http code
+refund.live? # livemode or not
+
+refund.amount # attributes defined on Ping++ API
+refund.description
 
 
 ## Retrieve Single Refund ##
@@ -194,6 +221,11 @@ charge.get_refund_list
 # Examples
 charge = EasyPing::Charge.find 'ch_0ijQi5LKqT5sEiOePOKWb1mF'
 refund_list = charge.all_refund limit: 5
+
+# Returned Refund List Object
+refund_list.has_more?
+refund_list.url
+refund_list.each {|re| puts re.id }
 ```
 
 Retrieve charge or refund object from async notification is easy.
@@ -235,21 +267,6 @@ ping = EasyPing.new({
 # do whatever you want without change of default configuration
 ping.charge 'order_number_3' 100, 'apple', 'one delicous big apple'
 
-## Helpers ##
-
-# instance helpers
-charge.raw # raw response body, typically json string
-charge.values # response body, hash
-charge.heasers # response headers
-charge.status # response status, http code
-charge.live? # livemode or not
-
-# all attributes
-charge.amount
-charge.livemode
-charge.refunded
-
-# note: refund objects apply same rules above
 
 ## Config ##
 config = EasyPing.config
@@ -295,5 +312,3 @@ end
 ## Others
 
 For Ping++ API information, please visit https://pingplusplus.com/document/api
-
-If something doesn't work, feel free to report a bug or start an issue.
